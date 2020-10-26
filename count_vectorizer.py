@@ -10,44 +10,47 @@ class CountVectorizer():
 
     def __init__(self, lowercase: bool = True):
         self.lowercase = lowercase
-        self.words_set: Set[str] = set()
+        self.features_set: Set[str] = set()
         self.feature_names: List[str] = []
-        self.list_of_counters: List[Counter] = []
-        self.list_of_lists: List[List[int]] = []
+        self.matrix: List[List[int]] = []
 
-    def fit(self, corpus: List[str], anew: bool):
+    def _fit(self, corpus: List[str], anew: bool):
         """
         Создание массива токенов, подготовка корпуса.
         """
         if anew:
-            self.words_set = set()
+            self.features_set = set()
             self.feature_names = []
-        self.list_of_counters = []
-        self.list_of_lists = []
+        list_of_counters = []
+        self.matrix = []
 
         for text in corpus:
             if self.lowercase:
                 text = text.lower()
             words = text.split()
-            self.list_of_counters.append(Counter(words))
+            list_of_counters.append(Counter(words))
 
             for word in words:
-                if word not in self.words_set:
-                    self.words_set.add(word)
-                    self.feature_names.append(word)
+                if word in self.features_set:
+                    continue
+                self.features_set.add(word)
+                self.feature_names.append(word)
+
+        return list_of_counters
 
     def fit_transform(self, corpus: List[str], anew: bool = True):
         """
         Возвращает матрицу частоты вхождений слов в тексты корпуса.
         """
-        self.fit(corpus, anew)
+        list_of_counters = self._fit(corpus, anew)
         features_len = len(self.feature_names)
-        for cntr in self.list_of_counters:
+        for cntr in list_of_counters:
             ans = [0] * features_len
+
             for i in cntr:
                 ans[self.feature_names.index(i)] = cntr[i]
-            self.list_of_lists.append(ans)
-        return self.list_of_lists
+            self.matrix.append(ans)
+        return self.matrix
 
     def get_feature_names(self):
         """
