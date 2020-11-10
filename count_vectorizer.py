@@ -2,7 +2,7 @@ from typing import List, Set
 from collections import Counter
 
 
-class CountVectorizer():
+class CountVectorizer:
     """
     Класс для создания массива токенов и матрицы частоты
     вхождения слов из корпуса в этот массив.
@@ -59,25 +59,47 @@ class CountVectorizer():
         return self.feature_names
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     corpus = [
-        'Crock Pot Pasta Never boil pasta again',
-        'Pasta Pomodoro Fresh ingredients Parmesan to taste'
+        "Crock Pot Pasta Never boil pasta again",
+        "Pasta Pomodoro Fresh ingredients Parmesan to taste",
     ]
     vectorizer = CountVectorizer()
     count_matrix = vectorizer.fit_transform(corpus)
-    assert vectorizer.get_feature_names() == ['crock', 'pot', 'pasta', 'never',
-                                              'boil', 'again', 'pomodoro',
-                                              'fresh', 'ingredients',
-                                              'parmesan', 'to', 'taste']
-    assert count_matrix == [[1, 1, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0],
-                            [0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1]]
-    corpus2 = [
-        'Crock not to taste'
+    assert vectorizer.get_feature_names() == [
+        "crock",
+        "pot",
+        "pasta",
+        "never",
+        "boil",
+        "again",
+        "pomodoro",
+        "fresh",
+        "ingredients",
+        "parmesan",
+        "to",
+        "taste",
     ]
-    assert vectorizer.fit_transform(corpus2, False) == [[1, 0, 0, 0, 0, 0,
-                                                         0, 0, 0, 0, 1, 1, 1]]
-    assert vectorizer.get_feature_names() == ['crock', 'pot', 'pasta', 'never',
-                                              'boil', 'again', 'pomodoro',
-                                              'fresh', 'ingredients',
-                                              'parmesan', 'to', 'taste', 'not']
+    assert count_matrix == [
+        [1, 1, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1],
+    ]
+    corpus2 = ["Crock not to taste"]
+    assert vectorizer.fit_transform(corpus2, False) == [
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1]
+    ]
+    assert vectorizer.get_feature_names() == [
+        "crock",
+        "pot",
+        "pasta",
+        "never",
+        "boil",
+        "again",
+        "pomodoro",
+        "fresh",
+        "ingredients",
+        "parmesan",
+        "to",
+        "taste",
+        "not",
+    ]
